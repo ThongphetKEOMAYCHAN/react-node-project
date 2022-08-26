@@ -1,11 +1,13 @@
 import './App.css';
 import IndexDashboard from './views/Dashboard/IndexDashboard';
-
+import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
-      <IndexDashboard/>
+      <BrowserRouter>
+          <IndexDashboard/>
+      </BrowserRouter>
     </div>
   );
 }
