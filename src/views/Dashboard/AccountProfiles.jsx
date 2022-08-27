@@ -12,8 +12,9 @@ import PersonAdd from "@mui/icons-material/PersonAdd";
 import Settings from "@mui/icons-material/Settings";
 import Logout from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
-
+import {useNavigate} from 'react-router-dom';
 function AccountProfiles() {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
@@ -49,7 +50,7 @@ function AccountProfiles() {
             sx: {
               overflow: "visible",
               filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: -8,
+              mt: -45,
               "& .MuiAvatar-root": {
                 width: 32,
                 height: 32,
@@ -76,8 +77,8 @@ function AccountProfiles() {
           <MenuItem>
             <Avatar /> Profile
           </MenuItem>
-          <MenuItem>
-            <Avatar /> My account
+          <MenuItem onClick={()=> navigate('/register')}>
+            <Avatar /> Register
           </MenuItem>
           <Divider />
           <MenuItem>
