@@ -50,7 +50,7 @@ function AccountProfiles() {
             sx: {
               overflow: "visible",
               filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-              mt: -45,
+              mt: -40,
               "& .MuiAvatar-root": {
                 width: 32,
                 height: 32,

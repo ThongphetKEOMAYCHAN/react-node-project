@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import Login from "../views/Auth/Login";
 import Register from "../views/Auth/Register";
 import IndexCategory from "../views/pages/Category/IndexCategory";
 
@@ -9,6 +10,7 @@ function IndexRoutes() {
       <Routes>
         <Route path="/category" element={<IndexCategory />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );

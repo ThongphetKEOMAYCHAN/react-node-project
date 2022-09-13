@@ -1,5 +1,5 @@
 const express = require('express')
-const app = express()
+const app = express();
 const cors = require("cors")
 const expressSanitizer = require('express-sanitizer')
 
@@ -11,8 +11,8 @@ var corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(express.json({limit: '3mb'}))
-app.use(express.urlencoded({limit: '3mb'}))
+app.use(express.json({limit: '10mb'}))
+app.use(express.urlencoded({ limit: '10mb',extended: true }));
 
 app.use(expressSanitizer());
 // app.use(express.json());
@@ -25,11 +25,11 @@ app.get("/", function (req, res) {
 
 app.use('/api/v1', require('./api/v1/api'));
 
-const server = app.listen(3000, function () {
+const server = app.listen(5000, function () {
     var host = server.address().address;
     var port = server.address().port;
 
-    console.log("You are runing at", host, port);
+    console.log("You are running at", host, port);
     console.log("You can exactly run yor project");
 })
 
