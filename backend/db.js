@@ -5,7 +5,7 @@ var connection = mysql.createPool({
     user: "root",
     password: "",
     port: "3306",
-    database:"react_node_db"
-})
+    database: "react_node_db"
+});
 
 module.exports = connection;
