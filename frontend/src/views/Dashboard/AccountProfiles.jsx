@@ -77,7 +77,7 @@ function AccountProfiles() {
           <MenuItem>
             <Avatar /> Profile
           </MenuItem>
-          <MenuItem onClick={()=> navigate('/register')}>
+          <MenuItem onClick={() => navigate("/register")}>
             <Avatar /> Register
           </MenuItem>
           <Divider />
@@ -93,7 +93,7 @@ function AccountProfiles() {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={() => navigate("/login")}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

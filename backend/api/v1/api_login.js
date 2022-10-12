@@ -18,7 +18,7 @@ router.post("/login", function (req, res) {
         if (err) throw err;
         if (result.length > 0) {
           let Logged = bcrypt.compareSync(pass, result[0].password);
-            if (Logged) {
+          if (Logged) {
               
             var payload = {
               uuid: result[0].uuid,
@@ -32,9 +32,10 @@ router.post("/login", function (req, res) {
               status: "success",
               message: "Login success",
               token: token,
+              email: email,
             });
-                
-                
+        
+            
           } else {
             res.json({ status: "error", message: "Password incorrect!!" });
           }
@@ -42,11 +43,11 @@ router.post("/login", function (req, res) {
           res.json({
             status: "error",
             message: "Login Failed! Please try again later!!",
-          });
+          })
         }
       }
-    );
+    )
   }
-});
+})
 
 module.exports = router;
