@@ -70,4 +70,11 @@ router.get("/fetch/products", jwt.verify, (req, res) => {
      })
      
 })
+router.get('/count/products', jwt.verify, (req, res) => {
+     const sql = 'SELECT  COUNT(id) as count FROM `tbl_products`';
+     db.query(sql, (err, result) => {
+          if (err) throw err;
+          res.send(result);
+     })
+})
 module.exports = router;

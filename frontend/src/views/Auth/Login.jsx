@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { Box, Container } from '@mui/system'
 import { Button, TextField, Typography } from '@mui/material';
 import axios from 'axios';
-
+import { useNavigate } from "react-router-dom";
 function Login() {
+     const navigate = useNavigate();
      const [signIn, setSignIn] = useState({
           email: '',
           password: ''
@@ -33,6 +34,8 @@ function Login() {
                          localStorage.setItem(
                               "login", (response.data.token)
                          );
+                          navigate("/");
+                          window.location.reload(true);
                     }
                })
                .catch(function (error) {

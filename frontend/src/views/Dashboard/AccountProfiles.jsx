@@ -24,6 +24,15 @@ function AccountProfiles() {
     setOpen(false);
   };
 
+  const logOut = () => {
+    const removeToken = localStorage.removeItem('login');
+    if (removeToken) {
+      console.log("System wrong please try again !");
+    } else {
+      navigate("/login");
+      window.location.reload(true);
+    }
+  }
   return (
     <div>
       <React.Fragment>
@@ -93,7 +102,7 @@ function AccountProfiles() {
             </ListItemIcon>
             Settings
           </MenuItem>
-          <MenuItem onClick={() => navigate("/login")}>
+          <MenuItem onClick={logOut}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>

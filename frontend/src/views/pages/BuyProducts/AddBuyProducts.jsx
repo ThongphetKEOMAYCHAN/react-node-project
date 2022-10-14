@@ -143,7 +143,7 @@ function AddBuyProducts() {
       })
 
       localStorage.removeItem("buyDetail")
-window.location.reload();
+      window.location.reload();
     } else if (listBuyData.length > 1) {
       console.log("many data");
       for (let i = 0; i < listBuyData.length; i++){

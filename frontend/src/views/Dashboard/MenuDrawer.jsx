@@ -53,6 +53,7 @@ function MenuDrawer() {
               className="link"
               primary="ໜ້າຫຼັກ"
               primaryTypographyProps={{ style: listItemTextStyle }}
+              onClick={() => navigate("/")}
             />
           </ListItemButton>
         </ListItem>
@@ -82,7 +83,10 @@ function MenuDrawer() {
         </ListItem>
         <Collapse in={orderOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
-            <ListItemButton onClick={()=> navigate("/order_products")} sx={{ pl: 4 }}>
+            <ListItemButton
+              onClick={() => navigate("/order_products")}
+              sx={{ pl: 4 }}
+            >
               <ListItemIcon>
                 <AddShoppingCartIcon />
               </ListItemIcon>

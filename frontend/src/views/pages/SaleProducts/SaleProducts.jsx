@@ -38,6 +38,26 @@ function SaleProducts() {
        setPage(0);
   }; 
   
+
+  // fetch sale data stories
+
+  const fetchSaleData = () => {
+   
+    fetch("http://127.0.0.1:5000/api/v1/get/sale", {
+      method: "get",
+      headers: { "x-access-token": localStorage.getItem("login") },
+    })
+      .then((resp) => {
+        return resp.json();
+      })
+      .then((data) => {
+        setSaleData(data);
+      });
+     
+  }
+  useEffect(() => {
+    fetchSaleData();
+  }, []);
   
   return (
     <div>
@@ -99,7 +119,7 @@ function SaleProducts() {
                     <TableCell
                       sx={{ fontWeight: "600", fontFamily: `${fontLao}` }}
                     >
-                      ພະນັກງານ
+                      ເວລາ
                     </TableCell>
                     <TableCell
                       sx={{ fontWeight: "600", fontFamily: `${fontLao}` }}
@@ -120,13 +140,7 @@ function SaleProducts() {
                             .includes(search.toLowerCase())
                         ) {
                           return row;
-                        } else if (
-                          row.userId
-                            .toLowerCase()
-                            .includes(search.toLowerCase())
-                        ) {
-                          return row;
-                        }
+                        } 
                       })
                       .slice(
                         page * rowsPerPage,
@@ -141,13 +155,13 @@ function SaleProducts() {
                             {row.proName}
                           </TableCell>
                           <TableCell sx={{ fontFamily: `${fontLao}` }}>
-                            {row.price}
-                          </TableCell>
-                          <TableCell sx={{ fontFamily: `${fontLao}` }}>
                             {row.amount}
                           </TableCell>
                           <TableCell sx={{ fontFamily: `${fontLao}` }}>
-                            {row.userId}
+                            {row.price}
+                          </TableCell>
+                          <TableCell sx={{ fontFamily: `${fontLao}` }}>
+                            {row.dateTime}
                           </TableCell>
                           <TableCell>
                             <IconButton>

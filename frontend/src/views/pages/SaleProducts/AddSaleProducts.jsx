@@ -16,6 +16,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
 import EditIcon from "@mui/icons-material/Edit";
@@ -38,7 +39,7 @@ function AddSaleProducts() {
   const [price, setPrice] = useState("");
   const [products, setProducts] = useState([]);
   const [addSale, setAddSale] = useState([]);
-  const [proId, setProId] = useState("");
+  const [proId, setProId] = useState([]);
   const [listSaleData, setListSaleData] = useState([]);
 
   const handleChangePage = (event, newPage) => {
@@ -49,7 +50,9 @@ function AddSaleProducts() {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
-     };
+  };
+
+  console.log(proId);
   const fetchData = () => {
     fetch("http://127.0.0.1:5000/api/v1/get/products", {
       method: "get",
@@ -60,33 +63,30 @@ function AddSaleProducts() {
       })
       .then((data) => {
         setProducts(data);
+        console.log("products", products);
       });
   };
   useEffect(() => {
     fetchData();
   }, []);
-  
+
   const saveHandle = () => {};
   // add to local
   const addSaleProducts = (e) => {
-       e.preventDefault();
-       console.log(proId.id);
-       console.log(price);
-       console.log(amount);
-          console.log(listSaleData);
-          let addSaleData = JSON.parse(localStorage.getItem("SaleDetail") || "[]");
-     console.log(products);
+    e.preventDefault();
+
+    let listSaleData = JSON.parse(localStorage.getItem("SaleDetail") || "[]");
     let SaleProducts = {
       productsId: proId.id,
       products: proId.proName,
-      price: price,
+      price: proId.price,
       amount: amount,
     };
-
     if (proId.id !== "") {
       listSaleData.push(SaleProducts);
-      localStorage.setItem("SaleDetail", JSON.stringify(addSaleData));
-     //  window.location.reload();
+      localStorage.setItem("SaleDetail", JSON.stringify(listSaleData));
+
+      window.location.reload();
     }
   };
   // get data from localStorage
@@ -99,6 +99,104 @@ function AddSaleProducts() {
   useEffect(() => {
     getLocal();
   }, []);
+
+  // delete data localStorage
+  const deleteHandle = (products) => {
+    const filteredProducts = listSaleData.filter((element, index) => {
+      return element.products !== products;
+    });
+
+    return (
+      localStorage.setItem("SaleDetail", JSON.stringify(filteredProducts)),
+      setListSaleData(filteredProducts)
+    );
+  };
+  // add to database
+
+  const saleProducts = () => {
+    const myHeaders = new Headers();
+    myHeaders.append("x-access-token", `${localStorage.getItem("login")}`);
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    const urlencoded = new URLSearchParams();
+    const user = localStorage.getItem("user");
+    console.log(user);
+    urlencoded.append("user", user);
+    if (listSaleData.length === 1) {
+      urlencoded.append("productsId", listSaleData[0].productsId);
+      urlencoded.append("products", listSaleData[0].products);
+      urlencoded.append("amount", listSaleData[0].amount);
+      urlencoded.append("price", listSaleData[0].price);
+      urlencoded.append("status", "1");
+
+      let requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: urlencoded,
+      };
+      fetch("http://127.0.0.1:5000/api/v1/create/sale/products", requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+          console.log(result);
+          console.log("result");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      localStorage.removeItem("SaleDetail");
+      window.location.reload();
+    } else if (listSaleData.length > 1) {
+      console.log("many data");
+      for (let i = 0; i < listSaleData.length; i++) {
+        urlencoded.append("productsId", listSaleData[i].productsId);
+        urlencoded.append("products", listSaleData[i].products);
+        urlencoded.append("amount", listSaleData[i].amount);
+        urlencoded.append("price", listSaleData[i].price);
+      }
+      let requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: urlencoded,
+      };
+      fetch("http://127.0.0.1:5000/api/v1/create/sale/products", requestOptions)
+        .then((response) => response.text())
+        .then((result) => {
+          console.log(result);
+          console.log("result");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      localStorage.removeItem("SaleDetail");
+      window.location.reload();
+    } else {
+      console.log("data required");
+    }
+  };
+
+  // Calculator
+
+  var amountTotal = 0;
+  var totalPrice = 0;
+  var allTotalPrice = 0;
+  var total = 0;
+  // var payMoney = 0;
+   //ເງິນຖອນ
+
+  for (let i = 0; i < listSaleData.length; i++) {
+    amountTotal = listSaleData[i].amount;
+    totalPrice = listSaleData[i].price;
+    allTotalPrice = amountTotal * totalPrice;
+    total += allTotalPrice;
+  }
+
+  // Calculator withdrawMoney  //ເງິນຖອນ
+  var withdrawMoney = total - price;
+  console.log("withdrawMoney", withdrawMoney);
+
+  // const moneyBack = productTotal;
+
   return (
     <div>
       <Container>
@@ -121,8 +219,8 @@ function AddSaleProducts() {
               labelId="demo-select-small"
               id="demo-select-small"
               label="ສິນຄ້າ"
-              name="products"
-              value={proId}
+              name="proId"
+              value={proId.id}
               onChange={(e) => setProId(e.target.value)}
             >
               {products.map((row) => {
@@ -156,8 +254,8 @@ function AddSaleProducts() {
             type="number"
             fullWidth
             variant="outlined"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            value={proId.price}
+            onChange={(e) => setProId(e.target.value)}
           />
           <Box
             sx={{ mt: 3, mb: 3, display: "flex", justifyContent: "flex-end" }}
@@ -234,14 +332,20 @@ function AddSaleProducts() {
                           <IconButton>
                             <DeleteIcon
                               color="secondary"
-                              // onClick={() => {
-                              //   deleteHandle(row.products);
-                              // }}
+                              onClick={() => {
+                                deleteHandle(row.products);
+                              }}
                             />
                           </IconButton>
                         </TableCell>
                       </TableRow>
                     ))}
+
+                  <TableRow>
+                    <TableCell />
+                    <TableCell>Subtotal</TableCell>
+                    <TableCell align="left"> {total} KIP</TableCell>
+                  </TableRow>
                 </TableBody>
               )}
             </Table>
@@ -256,6 +360,20 @@ function AddSaleProducts() {
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
         </Paper>
+        <Box sx={{ display: "flex", p: 2 }}>
+          <Box sx={{ display: "block" }}>
+            <Typography>ຈ່າຍເງິນ</Typography>
+            <TextField
+              variant="outlined"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </Box>
+          <Box sx={{ display: "block", ml: 2 }}>
+            <Typography>ເງິນຖອນ</Typography>
+            <TextField variant="outlined" value={withdrawMoney} />
+          </Box>
+        </Box>
         <Button
           variant="contained"
           color="success"
@@ -267,7 +385,7 @@ function AddSaleProducts() {
             height: "40px",
             fontFamily: `${fontLao}`,
           }}
-          onClick={saveHandle}
+          onClick={saleProducts}
         >
           ບັນທຶກຂໍ້ມູນ
         </Button>

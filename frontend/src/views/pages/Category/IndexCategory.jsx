@@ -70,7 +70,7 @@ const handleChangeRowsPerPage = (event) => {
   // get data
 
   const fetchData = () => {
-    fetch("http://127.0.0.1:8000/api/get_products", {
+    fetch("http://127.0.0.1:5000/api/v1/category/data", {
       method: "get",
       headers: { "x-access-token": localStorage.getItem("login") },
     })
